@@ -5,7 +5,7 @@ import { WebSocketServer } from 'ws';
 
 const MessageType = {
     RESPONCE_MESSAGE : 0,
-    SEND_MESSAGE : 1
+    SENT_MESSAGE : 1
 
     // 최신 블록 요청
     // 모든 블록 요청
@@ -51,10 +51,8 @@ const initMessageHandler = () => {
 
         switch(message.type)
         {
-            case MessageType.RESPONCE_MESSAGE:      // 메시지 받았을 때
-                break;
-            case MessageType.SEND_MESSAGE:      // 메시지 보낼 때
-                write(ws, message);
+            case MessageType.SENT_MESSAGE:      // 메시지 보낼 때
+                console.log(message.message);
                 break;
         }
     })
