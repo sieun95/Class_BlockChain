@@ -13,7 +13,6 @@ const MessageType = {
 }
 
 const sockets = [];
-
 const getPeers = () => {
     return sockets;
 }
