@@ -32,7 +32,7 @@ const initHttpServer = (myHttpPort) => {
     })
 
     app.post('/sendMessage', (req, res) => {
-        sendMessage(req.body.data)
+        res.send(sendMessage(req.body.data))
     })
 
     app.listen(myHttpPort, () => {

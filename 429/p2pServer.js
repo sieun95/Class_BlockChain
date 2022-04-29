@@ -45,7 +45,7 @@ const connectionToPeer = (newPeer) => {
     });
 }
 
-const initMessageHandler = () => {
+const initMessageHandler = (ws) => {
     ws.on('message', (data) => {
         const message = JSON.parse(data);
 
@@ -59,6 +59,7 @@ const initMessageHandler = () => {
 }
 
 const write = (ws, message) => {
+    console.log(message)
     ws.send(JSON.stringify(message));
 }
 
