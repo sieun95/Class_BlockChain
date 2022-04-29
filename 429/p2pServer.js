@@ -4,6 +4,9 @@ import WebSocket from 'ws';
 import { WebSocketServer } from 'ws';
 
 const sockets = [];
+const getPeers = () => {
+    return sockets
+}
 
 const initP2PServer = (p2pPort) => {
     const server = new WebSocketServer({port:p2pPort});
@@ -18,17 +21,17 @@ const initConnection = (ws) => {
 }
 
 const connectionToPeer = (newPeer) => {
+    console.log(newPeer)
     const ws = new WebSocket(newPeer);
     ws.on('open', () => { 
         initConnection(ws); 
+        console.log('Connect peer : ', newPeer)
         return true;
-    }
-);
+    });
     ws.on('error', () => { 
-        console.log('Fail to Connection peer : ', ws.remoteAddress) 
+        console.log('Fail to Connection peer : ', newPeer) 
         return false;
-    } 
-);
+    });
 }
 
-export { initP2PServer, connectionToPeer }
+export { initP2PServer, connectionToPeer, getPeers }
