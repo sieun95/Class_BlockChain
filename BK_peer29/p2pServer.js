@@ -4,33 +4,35 @@ import WebSocket from 'ws';
 import { WebSocketServer } from 'ws';
 
 const MessageType = {
-    RESPONCE_MESSAGE : 0,
-    SENT_MESSAGE : 1
+    RESPONCE_MESSAGE : 0,   // 받은 메세지 숫자로 메세지의 타입을 정해준다
+    SENT_MESSAGE : 1        // 보낸 메세지
 
     // 최신 블록 요청
     // 모든 블록 요청
     // 블록 전달
 }
 
-const sockets = [];
-const getPeers = () => {
+const sockets = [];     
+const getPeers = () => {        // 피어를 연결하면 소켓에 담아둔다
     return sockets;
 }
 
+// 
 const initP2PServer = (p2pPort) => {
     const server = new WebSocketServer({port:p2pPort});
     server.on('connection', (ws) => {          // on 은 connection은 연결이 되면 어떠한 함수를 호출하겠다 라는 식 ws모듈에 있는 내장함수
         initConnection(ws);
     })
-   
     console.log('listening P2PServer Port : ', p2pPort);
 }
 
+// 2
 const initConnection = (ws) => {
     sockets.push(ws);       // sockets의 배열안의 메모리를 추가하는거
     initMessageHandler(ws);
 }
 
+// 1
 const connectionToPeer = (newPeer) => {
     console.log(newPeer)
     const ws = new WebSocket(newPeer);
@@ -45,10 +47,10 @@ const connectionToPeer = (newPeer) => {
     });
 }
 
+// 3
 const initMessageHandler = (ws) => {
     ws.on('message', (data) => {
         const message = JSON.parse(data);
-
         switch(message.type)
         {
             case MessageType.SENT_MESSAGE:      // 메시지 보낼 때

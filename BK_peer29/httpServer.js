@@ -27,13 +27,13 @@ const initHttpServer = (myHttpPort) => {
        res.send(connectionToPeer(req.body.data))
     })
 
-    app.get('/peers', (req, res) => {
-        res.send(getPeers());
-    })
+    app.get('/peers', (req, res) => {   // 나와 연결된 다른 노드들을 모두 보여준다
+        res.send(getPeers())
+    });
 
     app.post('/sendMessage', (req, res) => {
         res.send(sendMessage(req.body.data))
-    })
+    });
 
     app.listen(myHttpPort, () => {
         console.log("listening httpServer Port : ", myHttpPort);
