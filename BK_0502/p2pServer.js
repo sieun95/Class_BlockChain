@@ -2,14 +2,18 @@
 
 import WebSocket from 'ws';
 import { WebSocketServer } from 'ws';
+import { getBlocks, getLatestBlock } from './block.js';
 
 const MessageType = {
-    RESPONCE_MESSAGE : 0,   // 받은 메세지 숫자로 메세지의 타입을 정해준다
-    SENT_MESSAGE : 1        // 보낸 메세지
+    // RESPONCE_MESSAGE : 0,   // 받은 메세지 숫자로 메세지의 타입을 정해준다
+    // SENT_MESSAGE : 1        // 보낸 메세지
 
     // 최신 블록 요청
+    QUERY_LATEST : 0,
     // 모든 블록 요청
+    QUERY_ALL : 1,
     // 블록 전달
+    RESPONSE_BLOCKCHAIN : 2,
 }
 
 const sockets = [];     
@@ -53,11 +57,45 @@ const initMessageHandler = (ws) => {
         const message = JSON.parse(data);
         switch(message.type)
         {
-            case MessageType.SENT_MESSAGE:      // 메시지 보낼 때
-                console.log(message.message);
+            // case MessageType.SENT_MESSAGE:      // 메시지 보낼 때
+            //     console.log(message.message);
+            //     break;
+            case MessageType.QUERY_LATEST:
+                break;
+            case MessageType.QUERY_ALL:         // 내가 누군가한테 블록을 보내달라고 요청
+                break;
+            case MessageType.RESPONSE_BLOCKCHAIN:        // 누군가 내가 요청한 블록을 보내준상태
                 break;
         }
     })
+}
+
+const queryLatestMessage = () => {
+    return ({ 
+        "type": MessageType.QUERY_LATEST,
+        "data": null
+        })
+}
+
+const queryAllMessage = () => {
+    return ({ 
+        "type": MessageType.QUERY_ALL,
+        "data": null
+        })
+}
+
+const responseLatestMessage = () => {
+    return ({ 
+        "type": MessageType.RESPONSE_BLOCKCHAIN,
+        "data":JSON.stringify(getLatestBlock())     // 내가 가지고 있는 마지막 블록
+        })
+}
+
+const responseAllMessage = () => {
+    return ({ 
+        "type": MessageType.RESPONSE_BLOCKCHAIN,
+        "data":JSON.stringify(getBlocks())      // 내가 가지고 있는 전체 블록
+        })
 }
 
 // 내가 하는 동작
