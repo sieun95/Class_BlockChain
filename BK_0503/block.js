@@ -13,7 +13,6 @@
 */
 
 import CryptoJS from "crypto-js";   // SHA256을 사용하기위해서 
-import { responseLatestMessage } from "./p2pServer";
 
 class Block {
   // 블록의 구조를 정리
@@ -189,4 +188,4 @@ const hexToBinary = (hex) => {
 // genesisBlock은 가장 먼저 만든 블록이기 때문에 blocks 첫번째 배열에 넣어준다.
 const blocks = [creatGenesisBlock()]; 
 
-export { getBlocks, createBlock, getLatestBlock, mineBlock, addBlock };
+export { getBlocks, createBlock, getLatestBlock, addBlock };

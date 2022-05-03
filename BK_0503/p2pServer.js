@@ -2,7 +2,7 @@
 
 import WebSocket from 'ws';
 import { WebSocketServer } from 'ws';
-import { getBlocks, getLatestBlock, createBlock ,addBlock } from './block.js';
+import { getBlocks, getLatestBlock, createBlock , addBlock } from './block.js';
 
 const MessageType = {
     // RESPONCE_MESSAGE : 0,   // 받은 메세지 숫자로 메세지의 타입을 정해준다
@@ -65,7 +65,7 @@ const initMessageHandler = (ws) => {
             case MessageType.QUERY_ALL:         // 내가 누군가한테 블록을 보내달라고 요청
                 break;
             case MessageType.RESPONSE_BLOCKCHAIN:        // 누군가 내가 요청한 블록을 보내준상태
-            console.log(ws._socket.remoteAddress, ':', message.message);
+            console.log(ws._socket.remoteAddress, ':', message.data);
                 break;
         }
     })
@@ -107,7 +107,7 @@ const write = (ws, message) => {        // ws : 보낼 상대방의 정보
 
 const broadcasting = (message) => {
     sockets.forEach( (socket) => {
-        write(socket,message);
+        write(socket,message);      // 소켓에 담긴 모든 피어들한테 보낸다.
     });
 }
 const mineBlock = (blockData) => {
