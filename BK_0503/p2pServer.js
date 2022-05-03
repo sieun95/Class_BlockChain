@@ -110,4 +110,13 @@ const sendMessage = (message) => {
     });
 }
 
-export { initP2PServer, connectionToPeer, getPeers, sendMessage }
+export { 
+    initP2PServer, 
+    connectionToPeer, 
+    getPeers, 
+    sendMessage, 
+    queryLatestMessage, 
+    queryAllMessage, 
+    responseLatestMessage, 
+    responseAllMessage  
+}

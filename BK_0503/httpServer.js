@@ -2,7 +2,7 @@
 import express from 'express';      // require 보다 크기가 작다
 import bodyParser from 'body-parser';
 import { createBlock, getBlocks } from './block.js';    // 함수를 사용하기 위해서 import를 해준다.
-import { connectionToPeer, getPeers, sendMessage } from './p2pServer.js';
+import { connectionToPeer, getPeers, queryLatestMessage, sendMessage, responseLatestMessage } from './p2pServer.js';
 
 
 // 초기화 함수 
@@ -34,6 +34,14 @@ const initHttpServer = (myHttpPort) => {
     app.post('/sendMessage', (req, res) => {
         res.send(sendMessage(req.body.data))
     });
+    
+    app.post('/responseLatest', (req, res) => {
+        res.send(responseLatestMessage(req.body.data))
+    })
+
+    app.post('/queryLatest', (req, res) => {
+        res.send(queryLatestMessage(req.body.data))
+    })
 
     app.listen(myHttpPort, () => {
         console.log("listening httpServer Port : ", myHttpPort);
