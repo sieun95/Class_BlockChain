@@ -35,6 +35,8 @@ const initP2PServer = (p2pPort) => {
 const initConnection = (ws) => {
     sockets.push(ws);       // sockets의 배열안의 메모리를 추가하는거
     initMessageHandler(ws);
+
+    write(ws, queryAllMessage());
 }
 
 // 1
@@ -64,9 +66,10 @@ const initMessageHandler = (ws) => {
             case MessageType.QUERY_LATEST:
                 break;
             case MessageType.QUERY_ALL:         // 내가 누군가한테 블록을 보내달라고 요청
+                write(ws, responseAllMessage());
                 break;
             case MessageType.RESPONSE_BLOCKCHAIN:        // 누군가 내가 요청한 블록을 보내준상태
-            // console.log(ws._socket.remoteAddress, ':', message.data);
+            console.log(ws._socket.remoteAddress, ':', message.data);
             // handleBlockchainResponse(message);
             replaceBlockchain(message.data);
                 break;
@@ -91,9 +94,11 @@ const replaceBlockchain = (receiveBlockchain) => {
     if (isValidBlockchain(receiveBlockchain)) {
         let blocks = getBlocks();
         if(receiveBlockchain.lenght > blocks.length) {
+            console.log('받은 블록체인 길이가 길다')
             blocks = receiveBlockchain;
         }
         else if(receiveBlockchain.lenght == blocks.length && random.boolean() ) {
+            console.log('받은 블록체인 길이가 같다')
             blocks = receiveBlockchain;
         }
     }
