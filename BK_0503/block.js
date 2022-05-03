@@ -48,7 +48,7 @@ const calculateHash = (index, data, timestamp, previousHash, difficulty, nonce) 
 const creatGenesisBlock = () => {
   // 제네시스 블록 만드는 함수
   const genesisBlock = new Block(   // 첫번째 블록을 만들어 준다.
-    0, "The Times 03/jan/2009 Chancellor on brink of second bailout for banks", new Date().getTime() / 1000, 0, 0, 0, 0);
+    0, "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks", 0, 0, 0, 0, 0);
   genesisBlock.hash = calculateHash(
     genesisBlock.index,
     genesisBlock.data,
