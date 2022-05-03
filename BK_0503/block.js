@@ -186,6 +186,6 @@ const hexToBinary = (hex) => {
 
 // 만들어진 블록을 저장할 배열 제니시스 블록이나 만들어질 블록
 // genesisBlock은 가장 먼저 만든 블록이기 때문에 blocks 첫번째 배열에 넣어준다.
-const blocks = [creatGenesisBlock()]; 
+let blocks = [creatGenesisBlock()]; 
 
-export { getBlocks, createBlock, getLatestBlock, addBlock };
+export { getBlocks, createBlock, getLatestBlock, addBlock, isValidNewBlock, blocks };
