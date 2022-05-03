@@ -13,6 +13,7 @@
 */
 
 import CryptoJS from "crypto-js";   // SHA256을 사용하기위해서 
+import { responseLatestMessage } from "./p2pServer";
 
 class Block {
   // 블록의 구조를 정리
@@ -87,15 +88,18 @@ const createBlock = (blockData) => {        // blockData라는 변수에 block�
     nextDifficulty,
     nextNonce
   );
- 
 
+  return newBlock;
+};
+
+const addBlock = (newBlock, previousBlock) => {
   if (isValidNewBlock(newBlock, previousBlock)) {   // 블록의 무결성 검증을하고 잘 만들어진 블록이면 push해준다.
     blocks.push(newBlock);
-    return newBlock;    // 웹에서 보고싶어서 return을 한거다.
+    return true
   }
-  console.log("fail to create newblock");
-  return null;
-};
+  return false;
+}
+
 
 // 블록의 무결성 검증
 /* 
@@ -185,4 +189,4 @@ const hexToBinary = (hex) => {
 // genesisBlock은 가장 먼저 만든 블록이기 때문에 blocks 첫번째 배열에 넣어준다.
 const blocks = [creatGenesisBlock()]; 
 
-export { getBlocks, createBlock, getLatestBlock };
+export { getBlocks, createBlock, getLatestBlock, mineBlock, addBlock };

@@ -2,7 +2,7 @@
 
 import WebSocket from 'ws';
 import { WebSocketServer } from 'ws';
-import { getBlocks, getLatestBlock } from './block.js';
+import { getBlocks, getLatestBlock, createBlock ,addBlock } from './block.js';
 
 const MessageType = {
     // RESPONCE_MESSAGE : 0,   // 받은 메세지 숫자로 메세지의 타입을 정해준다
@@ -65,6 +65,7 @@ const initMessageHandler = (ws) => {
             case MessageType.QUERY_ALL:         // 내가 누군가한테 블록을 보내달라고 요청
                 break;
             case MessageType.RESPONSE_BLOCKCHAIN:        // 누군가 내가 요청한 블록을 보내준상태
+            console.log(ws._socket.remoteAddress, ':', message.message);
                 break;
         }
     })
@@ -104,19 +105,25 @@ const write = (ws, message) => {        // ws : 보낼 상대방의 정보
     ws.send(JSON.stringify(message));
 }
 
-const sendMessage = (message) => {
+const broadcasting = (message) => {
     sockets.forEach( (socket) => {
         write(socket,message);
     });
 }
+const mineBlock = (blockData) => {
+    const newBlock = createBlock(blockData);
+    if (addBlock(newBlock, getLatestBlock())) {
+       broadcasting(responseLatestMessage());
+    }
+  }
+
+// 내가 새로운 블록을 채굴했을 때 연결된 노드들에게 전파
+
 
 export { 
     initP2PServer, 
     connectionToPeer, 
     getPeers, 
-    sendMessage, 
-    queryLatestMessage, 
-    queryAllMessage, 
-    responseLatestMessage, 
-    responseAllMessage  
+    broadcasting, 
+    mineBlock,
 }
