@@ -205,7 +205,7 @@ const replaceBlockchain = (receiveBlockchain) => {
   }
 }
 
-const isValidBlockchain = () => {
+const isValidBlockchain = (receiveBlockchain) => {
   // 같은 제네시스 블록인가
   if(JSON.stringify(receiveBlockchain[0]) !== JSON.stringify(getBlocks()[0])) {
       return false;
