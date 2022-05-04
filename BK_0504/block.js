@@ -191,13 +191,13 @@ const replaceBlockchain = (receiveBlockchain) => {
   if (isValidBlockchain(newBlocks)) {
 
       // let blocks = getBlocks();
-      if(newBlocks.lenght > blocks.length) {
+      if(newBlocks.length > blocks.length) {
           console.log('받은 블록체인 길이가 길다')
-          blocks = receiveBlockchain;
+          blocks = newBlocks;
       }
-      else if(newBlocks.lenght == blocks.length && random.boolean() ) {
+      else if(newBlocks.length == blocks.length && random.boolean() ) {
           console.log('받은 블록체인 길이가 같다')
-          blocks = receiveBlockchain;
+          blocks = newBlocks;
       }
   }
   else {
