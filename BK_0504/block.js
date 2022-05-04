@@ -13,6 +13,7 @@
 */
 
 import CryptoJS from "crypto-js";   // SHA256을 사용하기위해서 
+import random from "random";
 
 class Block {
   // 블록의 구조를 정리
@@ -223,4 +224,4 @@ const isValidBlockchain = () => {
 // genesisBlock은 가장 먼저 만든 블록이기 때문에 blocks 첫번째 배열에 넣어준다.
 let blocks = [creatGenesisBlock()]; 
 
-export { getBlocks, createBlock, getLatestBlock, addBlock, isValidNewBlock, blocks };
+export { getBlocks, createBlock, getLatestBlock, addBlock, isValidNewBlock, replaceBlockchain };
