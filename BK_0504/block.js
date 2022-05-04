@@ -15,6 +15,9 @@
 import CryptoJS from "crypto-js";   // SHA256을 사용하기위해서 
 import random from "random";
 
+const BLOCK_GENERATION_INTERVAL = 10;   // second 블록 생성주기
+const DIFFICULTY_ADJUSTMENT_INTERVAL = 10;    // second 블록 생성 난이도 generate block count 블록이 10개 생성될때마다 조절하겠다
+
 class Block {
   // 블록의 구조를 정리
   constructor(index, data, timestamp, hash, previousHash, difficulty, nonce) {
@@ -49,7 +52,7 @@ const calculateHash = (index, data, timestamp, previousHash, difficulty, nonce) 
 const creatGenesisBlock = () => {
   // 제네시스 블록 만드는 함수
   const genesisBlock = new Block(   // 첫번째 블록을 만들어 준다.
-    0, "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks", 0, 0, 0, 0, 0);
+    0, "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks", 0, 0, 0, 1, 0);
   genesisBlock.hash = calculateHash(
     genesisBlock.index,
     genesisBlock.data,
@@ -68,7 +71,7 @@ const createBlock = (blockData) => {        // blockData라는 변수에 block�
   const previousBlock = blocks[blocks.length - 1];  // 블록은 배열이기 때믄에 length -1을 하면 마지막 인덱스를 가져올수있다.
   const nextIndex = previousBlock.index + 1;    // 다음 블록의 인덱스는 현재 인덱스의 값보다 +1
   const nextTimestamp = new Date().getTime() / 1000;
-  const nextDifficulty = 1;   // 문제 난이도 20정도가 적당함
+  const nextDifficulty = getDifficulty();   // 문제 난이도 20정도가 적당함
   const nextNonce = findNonce(nextIndex, blockData, nextTimestamp, previousBlock.hash, nextDifficulty);
   const nextHash = calculateHash(
     nextIndex,
@@ -199,7 +202,7 @@ const replaceBlockchain = (receiveBlockchain) => {
       }
       else if(receiveBlockchain.length == blocks.length && random.boolean() ) {
           console.log('받은 블록체인 길이가 같다')
-          blocks = receiveBlockchain;
+          blocks = receiveBlockchain;   
       }
   }
   else {
@@ -221,6 +224,35 @@ const isValidBlockchain = (receiveBlockchain) => {
   return true;  
 }
 
+const getAdjustmentDifficulty = () => {
+  // 현재 만들 블록의 시간, 마지막으로 난이도 조정된 시간         
+  const prevAdjustedBlock = blocks[blocks.length - DIFFICULTY_ADJUSTMENT_INTERVAL - 1];
+  const latestBlock = getLatestBlock();
+  const elapsedTime = latestBlock.timestamp - prevAdjustedBlock.timestamp;
+  const expectedTime = DIFFICULTY_ADJUSTMENT_INTERVAL * BLOCK_GENERATION_INTERVAL;
+  
+  if(elapsedTime > expectedTime * 2) {
+    // 난이도를 낮춘다.
+    return prevAdjustedBlock.difficulty - 1;
+  }
+  else if(elapsedTime > expectedTime / 2) {
+    // 난이도를 높인다
+    return prevAdjustedBlock.difficulty + 1;
+  }
+  else {
+    return prevAdjustedBlock.difficulty
+  } 
+}
+
+const getDifficulty = () => {
+  const latestBlock = getLatestBlock();
+
+  // 난이도 조정 주기 확인
+  if(latestBlock.index % DIFFICULTY_ADJUSTMENT_INTERVAL === 0 && latestBlock.index !== 0) {
+    return getAdjustmentDifficulty
+  }
+  return latestBlock.difficulty;
+}
 
 // 만들어진 블록을 저장할 배열 제니시스 블록이나 만들어질 블록
 // genesisBlock은 가장 먼저 만든 블록이기 때문에 blocks 첫번째 배열에 넣어준다.
