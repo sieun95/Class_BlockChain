@@ -69,7 +69,7 @@ const initMessageHandler = (ws) => {
                 write(ws, responseAllMessage());
                 break;
             case MessageType.RESPONSE_BLOCKCHAIN:        // 누군가 내가 요청한 블록을 보내준상태
-            console.log(ws._socket.remoteAddress, ':', message.data);
+            // console.log(ws._socket.remoteAddress, ':', message.data);
             // handleBlockchainResponse(message);
             replaceBlockchain(message.data);
                 break;
@@ -91,8 +91,12 @@ const isValidBlockchain = () => {
 }
 
 const replaceBlockchain = (receiveBlockchain) => {
+    const newBlocks = JSON.parse(receiveBlockchain);
+    console.log(newBlocks)
+
     if (isValidBlockchain(receiveBlockchain)) {
-        let blocks = getBlocks();
+
+        // let blocks = getBlocks();
         if(receiveBlockchain.lenght > blocks.length) {
             console.log('받은 블록체인 길이가 길다')
             blocks = receiveBlockchain;
