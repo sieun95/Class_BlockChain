@@ -80,8 +80,9 @@ const handleBlockchainResponse = (receiveBlockchain) => {
     const newBlocks = JSON.parse(receiveBlockchain)
     // 받아온 블록의 마지막 인덱스가 내 마지막 블록의 인덱스보다 크다.
     const latestNewBlock = newBlocks[newBlocks.length -1];
+    console.log('받아온 마지막 블록 : ', latestNewBlock)
     const latestMyBlock = getLatestBlock();
-
+    console.log("내 마지막 블록 : ", latestMyBlock)
     if (latestNewBlock.index > latestMyBlock.index)
     {
     // 받아온 마지막 블록의 previousHash와 내 마지막 블록의 hash를 확인한다.
@@ -126,7 +127,7 @@ const queryAllMessage = () => {
 const responseLatestMessage = () => {
     return ({ 
         "type": MessageType.RESPONSE_BLOCKCHAIN,
-        "data":JSON.stringify(getLatestBlock())     // 내가 가지고 있는 마지막 블록
+        "data":JSON.stringify([getLatestBlock()])     // 내가 가지고 있는 마지막 블록
         })
 }
 
