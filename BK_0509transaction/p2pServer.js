@@ -4,6 +4,7 @@ import random from 'random';
 import WebSocket from 'ws';
 import { WebSocketServer } from 'ws';
 import { getBlocks, getLatestBlock, createBlock , addBlock, replaceBlockchain } from './block.js';
+import { getTransactionPool, addToTransactionPool } from './transaction.js';
 
 const MessageType = {
     // RESPONCE_MESSAGE : 0,   // 받은 메세지 숫자로 메세지의 타입을 정해준다
@@ -15,6 +16,10 @@ const MessageType = {
     QUERY_ALL : 1,
     // 블록 전달
     RESPONSE_BLOCKCHAIN : 2,
+
+    QUERY_TRANSACTION_POOL : 3,
+
+    RESPONSE_TRANSACTION_POOL : 4,
 }
 
 const sockets = [];     
@@ -70,7 +75,14 @@ const initMessageHandler = (ws) => {
                 break;
             case MessageType.RESPONSE_BLOCKCHAIN:        // 누군가 내가 요청한 블록을 보내준상태
             // console.log(ws._socket.remoteAddress, ':', message.data);
-            handleBlockchainResponse(message.data);
+                handleBlockchainResponse(message.data);
+                break;
+
+            case MessageType.QUERY_TRANSACTION_POOL:
+                write(ws, responseTransactionPoolMessage());
+                break;
+            case MessageType.RESPONSE_TRANSACTION_POOL:
+                handleTransactionPoolResponse(message.data);
                 break;
         }
     })
@@ -107,7 +119,18 @@ const handleBlockchainResponse = (receiveBlockchain) => {
         replaceBlockchain(newBlocks);
     }
     }
+}
 
+const  handleTransactionPoolResponse = (recieveTransactionPool) => {
+    console.log('recieveTransactionPool :', recieveTransactionPool);
+
+    recieveTransactionPool.forEach((transaction) => {
+        // 중복검사
+        // 트랜잭션 풀에 추가
+        addToTransactionPool(transaction);
+
+        // 다시 전파
+    })
 }
 
 const queryLatestMessage = () => {
@@ -135,6 +158,13 @@ const responseAllMessage = () => {
     return ({ 
         "type": MessageType.RESPONSE_BLOCKCHAIN,
         "data":JSON.stringify(getBlocks())      // 내가 가지고 있는 전체 블록
+        })
+}
+
+const responseTransactionPoolMessage = () => {
+    return ({ 
+        "type": MessageType.RESPONSE_TRANSACTION_POOL,
+        "data":JSON.stringify(getTransactionPool())      // 내가 가지고 있는 전체 트랜잭션
         })
 }
 
