@@ -271,4 +271,31 @@ const isValidateTxForPool = (transaction) => {
     return true;
 }
 
-export { getTransactionPool, addToTransactionPool }
+const updateTransactionPool = () => {
+
+    const removable = [];
+    // 1. 현재 트랜잭션 풀에 있는 트랜잭션 중에
+    // 사용되지 않은 TxOuts내용과 일치하지 않는 트랜잭션들을 제거한다.
+    for (const tx of transactionPool) {
+        for (const txIn of tx.txIns) {
+            if(isInTx(ixIn)) {
+
+            }
+            else {
+                removable.push(tx);
+                break;
+            }
+        }
+    }
+    transactionPool = _.without(transactionPool, ...removable);
+}
+
+const isInTx = (txIn) => {
+    const findTxOut = _(unspentTxOuts).find((uTxO) => { 
+        return uTxO.txOutIndex === txIn.txOutIndex && 
+                uTxO.txOutId === txIn.txOutId
+            })
+        return findTxOut !== undefined;
+}
+
+export { getTransactionPool, addToTransactionPool, getCoinbaseTransaction, updateTransactionPool }
