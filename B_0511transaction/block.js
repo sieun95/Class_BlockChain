@@ -131,13 +131,13 @@ const addBlock = (newBlock, previousBlock) => {
 
 const inValidBlockStructure = (newBlock) => {
   if (
-    typeof newBlock.index === "number" &&
-    typeof newBlock.data === "string" &&
-    typeof newBlock.timestamp === "number" &&
-    typeof newBlock.hash === "string" &&
-    typeof newBlock.previousHash === "string" &&
-    typeof newBlock.difficulty === "number" &&
-    typeof newBlock.nonce === "number"
+    typeof newBlock.index === "number" &&   // 배열의 길이
+    typeof newBlock.data === "string" &&    // 
+    typeof newBlock.timestamp === "number" && // 그냥 시간
+    typeof newBlock.hash === "string" &&    // 암호화된거
+    typeof newBlock.previousHash === "string" &&    // 암호화된 이전 블록해쉬
+    typeof newBlock.difficulty === "number" &&  // 난이도
+    typeof newBlock.nonce === "number"    // 이거머임?
   ) {
     return true;
   }
